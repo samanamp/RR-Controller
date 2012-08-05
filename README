@@ -1,0 +1,11 @@
+This is an android application to send commands and recieve answers to/from The Hardware-set of RR-control project.
+
+
+
+*A little intorduction to RR-Control Project
+
+  This project consist of two major hardware boards. The Parent and Childs.
+  The parent recieves command from a GSM modem via SMS and after authorizing and analyzing it, sends command to a specific child (mentioned in command).
+  This child can do everything that an ATMEGA16 can perfome, just needs some coding in destination.
+  After doing the job, the child answers and the Parent forwards the answer to User.
+  Now, the job is done. :)
