@@ -9,5 +9,6 @@
     <string name="child_setting">پیکربندی فرزندان</string>
     <string name="command_setting">پیکربندی دستورات</string>
     <string name="about">درباره ما</string>
+    <string name="title_activity_child_setting">ChildSettingActivity</string>
 
 </resources>

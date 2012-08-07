@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;Command.java&apos; to &apos;RRC app/src/com.saman.rrc.app&apos;&#x0D;&#x0A;- Original project: &apos;RRC app&apos;&#x0D;&#x0A;- Destination element: &apos;RRC app/src/com.saman.rrc.app&apos;&#x0D;&#x0A;- Original element: &apos;Command.java&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;com.saman.rrc.app" element1="/src&lt;{Command.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1344330288358" units="1" version="1.0"/>
+</session>

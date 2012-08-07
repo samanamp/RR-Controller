@@ -1,0 +1,61 @@
+package com.saman.rrc.app;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+
+public class DatabaseHandler extends SQLiteOpenHelper {
+	 
+    // All Static variables
+    // Database Version
+    private static final int DATABASE_VERSION = 1;
+ 
+    // Database Name = Child Command Variable Manager
+    private static final String DATABASE_NAME = "ccvManager";
+ 
+    // Child table name
+    private static final String CH_TABLE_CONTACTS = "childs"; 
+    // Child Table Columns names
+    private static final String CH_KEY_ID = "id";
+    private static final String CH_KEY_CODE = "code";
+    private static final String CH_KEY_NAME = "name";
+    
+ // Command table name
+    private static final String CM_TABLE_CONTACTS = "commands"; 
+    // Child Table Columns names
+    private static final String CM_KEY_ID = "id";
+    private static final String CM_KEY_CODE = "code";
+    private static final String CM_KEY_CHID = "childid";
+    private static final String CM_KEY_NAME = "name";
+    
+    private static final String VA_TABLE_CONTACTS = "variables"; 
+    // Child Table Columns names
+    private static final String VA_KEY_ID = "id";
+    private static final String VA_KEY_CODE = "code";
+    private static final String VA_KEY_CMID = "commandid";
+    private static final String VA_KEY_NAME = "name";
+    
+ 
+    public DatabaseHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+ 
+    // Creating Tables
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
+                + KEY_PH_NO + " TEXT" + ")";
+        db.execSQL(CREATE_CONTACTS_TABLE);
+    }
+ 
+    // Upgrading database
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+ 
+        // Create tables again
+        onCreate(db);
+    }

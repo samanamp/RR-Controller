@@ -1,0 +1,84 @@
+package com.saman.rrc.app;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+
+public class DatabaseHandler extends SQLiteOpenHelper {
+	 
+    // All Static variables
+    // Database Version
+    private static final int DATABASE_VERSION = 1;
+ 
+    // Database Name = Child Command Variable Manager
+    private static final String DATABASE_NAME = "ccvManager";
+ 
+    // Child table name
+    private static final String CH_TABLE = "childs"; 
+    // Child Table Columns names
+    private static final String CH_KEY_ID = "id";
+    private static final String CH_KEY_CODE = "code";
+    private static final String CH_KEY_NAME = "name";
+    
+ // Command table name
+    private static final String CM_TABLE = "commands"; 
+    // Command Table Columns names
+    private static final String CM_KEY_ID = "id";
+    private static final String CM_KEY_CODE = "code";
+    private static final String CM_KEY_CHID = "childid";
+    private static final String CM_KEY_NAME = "name";
+    
+    //Variable Table name
+    private static final String VA_TABLE = "variables"; 
+    // Variable Table Columns names
+    private static final String VA_KEY_ID = "id";
+    private static final String VA_KEY_CODE = "code";
+    private static final String VA_KEY_CMID = "commandid";
+    private static final String VA_KEY_NAME = "name";
+    
+ 
+    public DatabaseHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+ 
+    // Creating Tables
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+    	
+    //--Child table-------------------------------    
+        String CREATE_CHILDS_TABLE = "CREATE TABLE " + CH_TABLE + "("
+                + CH_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ CH_KEY_CODE + " INTEGER,"
+                + CH_KEY_NAME + " TEXT"
+                +")";
+        db.execSQL(CREATE_CHILDS_TABLE);
+        
+      //--Command table-------------------------------    
+        String CREATE_COMMANDS_TABLE = "CREATE TABLE " + CM_TABLE + "("
+                + CM_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ CM_KEY_CODE + " INTEGER,"
+        		+ CM_KEY_CHID + " INTEGER,"
+                + CM_KEY_NAME + " TEXT"
+                +")";
+        db.execSQL(CREATE_COMMANDS_TABLE);
+        
+      //--Variable table-------------------------------    
+        String CREATE_VARIABLES_TABLE = "CREATE TABLE " + VA_TABLE + "("
+                + VA_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ VA_KEY_CODE + " INTEGER,"
+        		+ VA_KEY_CMID + " INTEGER,"
+                + VA_KEY_NAME + " TEXT"
+                +")";
+        db.execSQL(CREATE_VARIABLES_TABLE);
+    }
+ 
+    // Upgrading database
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+ 
+        // Create tables again
+        onCreate(db);
+    }

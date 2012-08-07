@@ -1,6 +1,7 @@
 package com.saman.rrc.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,11 @@ public class MainActivity extends Activity {
     public void child_setting(){
     	TextView txt = (TextView) findViewById(R.id.textView1);
     	txt.setText("Child Setting!");
+    	
+        Intent intent = new Intent(this, ChildSettingActivity.class);
+        
+        startActivity(intent);
+        
     }
     public void command_setting(){
     	TextView txt = (TextView) findViewById(R.id.textView1);
