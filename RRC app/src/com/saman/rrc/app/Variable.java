@@ -8,7 +8,7 @@ public class Variable {
 	
 	public Variable(){}
 	
-	public Variable( int id, int commandID, int code, String name){
+	public Variable( int id, int code, int commandID, String name){
 		this.id = id;
 		this.commandID=commandID;
 		this.code = code;

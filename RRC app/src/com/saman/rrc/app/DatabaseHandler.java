@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -90,10 +91,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
     
+    public void deleteAll() {
+        // Drop older table if existed
+    	SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + CH_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + VA_TABLE);
+        
+    }
+    
     // Adding new child
     public void addChild(Child child) {
         SQLiteDatabase db = this.getWritableDatabase();
-        
+        Log.d("Add Child", child.getName());
         ContentValues values = new ContentValues();
         values.put(CH_KEY_CODE, child.getCode()); // Child Code
         values.put(CH_KEY_NAME, child.getName()); // Child Name        
@@ -146,7 +156,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     	
     }
      
-    // Getting childs Count
+    // Getting children Count
     public int getChildsCount() {
     	String countQuery = "SELECT  * FROM " + CH_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -176,25 +186,203 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     	SQLiteDatabase db = this.getWritableDatabase();
         db.delete(CH_TABLE, CH_KEY_ID + " = ?",
                 new String[] { String.valueOf(child.getID()) });
+        
+        List<Command> coms = this.getAllCommands(child.getID());
+        for(Command com : coms)
+        	this.deleteCommand(com);
+        
         db.close();
     }
     
     
     // Adding new command
-    public void addCommand(Command command) {}
+    public void addCommand(Command command) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        
+        ContentValues values = new ContentValues();
+        values.put(CM_KEY_CODE, command.getCode()); // Child Code
+        values.put(CM_KEY_CHID, command.getChildID()); // Child Code
+        values.put(CM_KEY_NAME, command.getName()); // Child Name        
+     
+        // Inserting Row
+        db.insert(CM_TABLE, null, values);
+        db.close(); // Closing database connection
+    }
      
     // Getting single command
-    public Command getCommand(int id) {}
+    public Command getCommand(int id) {
+    	SQLiteDatabase db = this.getReadableDatabase();
+   	 
+        Cursor cursor = db.query(CM_TABLE, new String[] { CM_KEY_ID,
+                CM_KEY_CODE, CM_KEY_CHID, CM_KEY_NAME }, CM_KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+     
+        Command command = new Command(Integer.parseInt(cursor.getString(0)),
+        		Integer.parseInt(cursor.getString(1)),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
+        // return child
+        return command;
+    }
      
     // Getting All commands
-    public List<Command> getAllCommands(int childID) {}
+    public List<Command> getAllCommands(int childID) {
+    	
+    	List<Command> commandList = new ArrayList<Command>();
+    	String getQuery = "SELECT * FROM "
+    			+ CM_TABLE
+    			+ " WHERE "+CM_KEY_CHID+" = ?";
+    	SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(getQuery, new String[] { String.valueOf(childID)});
+        //Log.d("Commands: ", "before command");
+     // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+            	//Log.d("Commands: ", "In command");
+                Command command = new Command();
+                command.setID(Integer.parseInt(cursor.getString(0)));
+                command.setCode(Integer.parseInt(cursor.getString(1)));
+                command.setChildID(Integer.parseInt(cursor.getString(2)));
+                command.setName(cursor.getString(3));
+                // Adding child to list
+                commandList.add(command);
+            } while (cursor.moveToNext());
+        }
+        
+        return commandList;
+    }
      
     // Getting commands Count
-    public int getCommandsCount() {}
+    public int getCommandsCount() {
+    	String countQuery = "SELECT  * FROM " + CM_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+ 
+        // return count
+        return cursor.getCount();
+    }
     
     // Updating single command
-    public int updateCommand(Command command) {}
+    public int updateCommand(Command command) {
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+   	 
+        ContentValues values = new ContentValues();
+        values.put(CM_KEY_CODE, command.getCode());
+        values.put(CM_KEY_CHID, command.getChildID());
+        values.put(CM_KEY_NAME, command.getName());        
+     
+        // updating row
+        return db.update(CM_TABLE, values, CM_KEY_ID + " = ?",
+                new String[] { String.valueOf(command.getID()) });
+    }
+     
      
     // Deleting single command
-    public void deleteCommand(Command command) {}
+    public void deleteCommand(Command command) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(CM_TABLE, CM_KEY_ID + " = ?",
+                new String[] { String.valueOf(command.getID()) });
+        
+        List<Variable> vars = this.getAllVariables(command.getID());
+        for(Variable va : vars)
+        	this.deleteVariable(va);
+        
+        db.close();
+    }
+    
+    
+ 
+ // Adding new variable
+    public void addVariable(Variable variable) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        
+        ContentValues values = new ContentValues();
+        values.put(VA_KEY_CODE, variable.getCode());      // Variable Code
+        values.put(VA_KEY_CMID, variable.getCommandID()); // Commandid
+        values.put(VA_KEY_NAME, variable.getName());      // Variable Name        
+     
+        // Inserting Row
+        db.insert(VA_TABLE, null, values);
+        db.close(); // Closing database connection
+    }
+     
+    // Getting single variable
+    public Variable getVariable(int id) {
+    	SQLiteDatabase db = this.getReadableDatabase();
+   	 
+        Cursor cursor = db.query(VA_TABLE, new String[] { VA_KEY_ID,
+                VA_KEY_CODE, VA_KEY_CMID, VA_KEY_NAME }, VA_KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+     
+        Variable variable = new Variable(Integer.parseInt(cursor.getString(0)),
+        		Integer.parseInt(cursor.getString(1)),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
+        // return child
+        return variable;
+    }
+     
+    // Getting All variables
+    public List<Variable> getAllVariables(int commandID) {
+    	
+    	List<Variable> variableList = new ArrayList<Variable>();
+    	String getQuery = "SELECT * FROM "
+    			+ VA_TABLE
+    			+ " WHERE "+VA_KEY_CMID+" = ?";
+    	SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(getQuery, new String[] { String.valueOf(commandID)});
+        //Log.d("Variables: ", "before variable");
+     // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+            	//Log.d("Variables: ", "In variable");
+                Variable variable = new Variable();
+                variable.setID(Integer.parseInt(cursor.getString(0)));
+                variable.setCode(Integer.parseInt(cursor.getString(1)));
+                variable.setCommandID(Integer.parseInt(cursor.getString(2)));
+                variable.setName(cursor.getString(3));
+                // Adding child to list
+                variableList.add(variable);
+            } while (cursor.moveToNext());
+        }
+        
+        return variableList;
+    }
+     
+    // Getting variables Count
+    public int getVariablesCount() {
+    	String countQuery = "SELECT  * FROM " + VA_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+ 
+        // return count
+        return cursor.getCount();
+    }
+    
+    // Updating single variable
+    public int updateVariable(Variable variable) {
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+   	 
+        ContentValues values = new ContentValues();
+        values.put(VA_KEY_CODE, variable.getCode());
+        values.put(VA_KEY_CMID, variable.getCommandID());
+        values.put(VA_KEY_NAME, variable.getName());        
+     
+        // updating row
+        return db.update(VA_TABLE, values, VA_KEY_ID + " = ?",
+                new String[] { String.valueOf(variable.getID()) });
+    }
+     
+     
+    // Deleting single variable
+    public void deleteVariable(Variable variable) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(VA_TABLE, VA_KEY_ID + " = ?",
+                new String[] { String.valueOf(variable.getID()) });
+        db.close();
+    }
 }

@@ -9,7 +9,7 @@ public class Command {
 	
 	public Command(){}
 	
-	public Command( int id, int childID, int code, String name){
+	public Command( int id, int code, int childID, String name){
 		this.id = id;
 		this.childID=childID;
 		this.code = code;
