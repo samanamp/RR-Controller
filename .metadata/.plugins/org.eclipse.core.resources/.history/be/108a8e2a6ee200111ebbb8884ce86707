@@ -1,0 +1,479 @@
+package com.saman.rrc.app;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+
+public class DatabaseHandler extends SQLiteOpenHelper {
+	 
+    // All Static variables
+    // Database Version
+    private static final int DATABASE_VERSION = 1;
+ 
+    // Database Name = Child Command Variable Manager
+    private static final String DATABASE_NAME = "ccvManager";
+ 
+    // Child table name
+    private static final String CH_TABLE = "childs"; 
+    // Child Table Columns names
+    private static final String CH_KEY_ID = "id";
+    private static final String CH_KEY_CODE = "code";
+    private static final String CH_KEY_NAME = "name";
+    
+ // Command table name
+    private static final String CM_TABLE = "commands"; 
+    // Command Table Columns names
+    private static final String CM_KEY_ID = "id";
+    private static final String CM_KEY_CODE = "code";
+    private static final String CM_KEY_CHID = "childid";
+    private static final String CM_KEY_NAME = "name";
+    
+    //Variable Table name
+    private static final String VA_TABLE = "variables"; 
+    // Variable Table Columns names
+    private static final String VA_KEY_ID = "id";
+    private static final String VA_KEY_CODE = "code";
+    private static final String VA_KEY_CMID = "commandid";
+    private static final String VA_KEY_NAME = "name";
+    
+    //System Settingss Table Name
+    private static final String SYS_TABLE = "systemsettings"; 
+    // Variable Table Columns names
+    private static final String SYS_KEY_ID = "id";
+    private static final String SYS_KEY_TELNUM = "tel";
+    private static final String SYS_KEY_PASS = "pass";
+    
+    public DatabaseHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+ 
+    // Creating Tables
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+    	
+    //--Child table-------------------------------    
+        String CREATE_CHILDS_TABLE = "CREATE TABLE " + CH_TABLE + "("
+                + CH_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ CH_KEY_CODE + " INTEGER,"
+                + CH_KEY_NAME + " TEXT"
+                +")";
+        db.execSQL(CREATE_CHILDS_TABLE);
+        
+      //--Command table-------------------------------    
+        String CREATE_COMMANDS_TABLE = "CREATE TABLE " + CM_TABLE + "("
+                + CM_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ CM_KEY_CODE + " INTEGER,"
+        		+ CM_KEY_CHID + " INTEGER,"
+                + CM_KEY_NAME + " TEXT"
+                +")";
+        db.execSQL(CREATE_COMMANDS_TABLE);
+        
+      //--Variable table-------------------------------    
+        String CREATE_VARIABLES_TABLE = "CREATE TABLE " + VA_TABLE + "("
+                + VA_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ VA_KEY_CODE + " INTEGER,"
+        		+ VA_KEY_CMID + " INTEGER,"
+                + VA_KEY_NAME + " TEXT"
+                +")";
+        db.execSQL(CREATE_VARIABLES_TABLE);
+        
+        //--System Settings Table----------------------
+        String CREATE_SYS_TABLE = "CREATE TABLE " + SYS_TABLE + "("
+                + SYS_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ SYS_KEY_TELNUM + " INTEGER,"
+                + SYS_KEY_PASS + " TEXT"
+                +")";
+        db.execSQL(CREATE_SYS_TABLE);
+        
+        
+        
+        ContentValues values = new ContentValues();
+        values.put(SYS_KEY_TELNUM, 0000); // Child Code
+        values.put(SYS_KEY_PASS, "0000"); // Child Name        
+        
+        // Inserting Row
+        db.insert(SYS_TABLE, null, values);
+        db.close(); // Closing database connection
+        
+    }
+ 
+    // Upgrading database
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + CH_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + VA_TABLE);
+        
+        // Create tables again
+        onCreate(db);
+    }
+    
+    public int changeSysSettings(SysSetting sys){
+    	SQLiteDatabase db = this.getWritableDatabase();
+   	 
+        ContentValues values = new ContentValues();
+        values.put(SYS_KEY_TELNUM, sys.getTel());
+        values.put(SYS_KEY_PASS, sys.getPass());        
+        
+        // updating row
+        return db.update(SYS_TABLE, values, SYS_KEY_ID + " = ?",
+                new String[] { String.valueOf(1) });    	
+    }
+    
+    public SysSetting getSysSetting(){
+    	SQLiteDatabase db = this.getReadableDatabase();
+   	 
+        Cursor cursor = db.query(SYS_TABLE, new String[] { SYS_KEY_ID,
+                SYS_KEY_TELNUM, SYS_KEY_PASS }, CH_KEY_ID + "=?",
+                new String[] { String.valueOf(1) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+     
+        SysSetting sys = new SysSetting(Integer.parseInt(cursor.getString(1)), cursor.getString(2));
+        // return child
+        return sys;    	
+    }
+    
+    // Adding new child
+    public void addChild(Child child) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.d("Add Child", child.getName());
+        ContentValues values = new ContentValues();
+        values.put(CH_KEY_CODE, child.getCode()); // Child Code
+        values.put(CH_KEY_NAME, child.getName()); // Child Name        
+     
+        // Inserting Row
+        db.insert(CH_TABLE, null, values);
+        db.close(); // Closing database connection
+    }
+     
+    // Getting single child
+    public Child getChild(int id) {
+    	SQLiteDatabase db = this.getReadableDatabase();
+    	 
+        Cursor cursor = db.query(CH_TABLE, new String[] { CH_KEY_ID,
+                CH_KEY_CODE, CH_KEY_NAME }, CH_KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+     
+        Child child = new Child(Integer.parseInt(cursor.getString(0)),
+        		Integer.parseInt(cursor.getString(1)), cursor.getString(2));
+        // return child
+        return child;
+    }
+     
+    // Getting All childs
+    public List<Child> getAllChilds() {
+    	
+    	List<Child> childList = new ArrayList<Child>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + CH_TABLE;
+     
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+     
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Child child = new Child();
+                child.setID(Integer.parseInt(cursor.getString(0)));
+                child.setCode(Integer.parseInt(cursor.getString(1)));
+                child.setName(cursor.getString(2));
+                // Adding child to list
+                childList.add(child);
+            } while (cursor.moveToNext());
+        }
+     
+        // return child list
+        return childList;
+    	
+    }
+     
+    // Getting children Count
+    public int getChildsCount() {
+    	String countQuery = "SELECT  * FROM " + CH_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+ 
+        // return count
+        return cursor.getCount();
+    }
+    
+    // Updating single child
+    public int updateChild(Child child) {
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	 
+        ContentValues values = new ContentValues();
+        values.put(CH_KEY_CODE, child.getCode());
+        values.put(CH_KEY_NAME, child.getName());        
+     
+        // updating row
+        return db.update(CH_TABLE, values, CH_KEY_ID + " = ?",
+                new String[] { String.valueOf(child.getID()) });
+    }
+     
+    // Deleting single child
+    public void deleteChild(Child child) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(CH_TABLE, CH_KEY_ID + " = ?",
+                new String[] { String.valueOf(child.getID()) });
+        
+        List<Command> coms = this.getAllCommands(child.getID());
+        for(Command com : coms)
+        	this.deleteCommand(com);
+        
+        db.close();
+    }
+    
+    
+    // Adding new command
+    public void addCommand(Command command) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        
+        ContentValues values = new ContentValues();
+        values.put(CM_KEY_CODE, command.getCode()); // Child Code
+        values.put(CM_KEY_CHID, command.getChildID()); // Child Code
+        values.put(CM_KEY_NAME, command.getName()); // Child Name        
+     
+        // Inserting Row
+        db.insert(CM_TABLE, null, values);
+        db.close(); // Closing database connection
+    }
+     
+    // Getting single command
+    public Command getCommand(int id) {
+    	SQLiteDatabase db = this.getReadableDatabase();
+   	 
+        Cursor cursor = db.query(CM_TABLE, new String[] { CM_KEY_ID,
+                CM_KEY_CODE, CM_KEY_CHID, CM_KEY_NAME }, CM_KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+     
+        Command command = new Command(Integer.parseInt(cursor.getString(0)),
+        		Integer.parseInt(cursor.getString(1)),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
+        // return child
+        return command;
+    }
+     
+    // Getting All commands
+    public List<Command> getAllCommands(int childID) {
+    	
+    	List<Command> commandList = new ArrayList<Command>();
+    	String getQuery = "SELECT * FROM "
+    			+ CM_TABLE
+    			+ " WHERE "+CM_KEY_CHID+" = ?";
+    	SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(getQuery, new String[] { String.valueOf(childID)});
+        //Log.d("Commands: ", "before command");
+     // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+            	//Log.d("Commands: ", "In command");
+                Command command = new Command();
+                command.setID(Integer.parseInt(cursor.getString(0)));
+                command.setCode(Integer.parseInt(cursor.getString(1)));
+                command.setChildID(Integer.parseInt(cursor.getString(2)));
+                command.setName(cursor.getString(3));
+                // Adding child to list
+                commandList.add(command);
+            } while (cursor.moveToNext());
+        }
+        
+        return commandList;
+    }
+    
+    public List<Command> getAllCommands() {
+    	
+    	List<Command> commandList = new ArrayList<Command>();
+    	 String selectQuery = "SELECT  * FROM " + CM_TABLE;
+    	SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+            	//Log.d("Commands: ", "In command");
+                Command command = new Command();
+                command.setID(Integer.parseInt(cursor.getString(0)));
+                command.setCode(Integer.parseInt(cursor.getString(1)));
+                command.setChildID(Integer.parseInt(cursor.getString(2)));
+                command.setName(cursor.getString(3));
+                // Adding child to list
+                commandList.add(command);
+            } while (cursor.moveToNext());
+        }
+        
+        return commandList;
+    }
+     
+    // Getting commands Count
+    public int getCommandsCount() {
+    	String countQuery = "SELECT  * FROM " + CM_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+ 
+        // return count
+        return cursor.getCount();
+    }
+    
+    // Updating single command
+    public int updateCommand(Command command) {
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+   	 
+        ContentValues values = new ContentValues();
+        values.put(CM_KEY_CODE, command.getCode());
+        values.put(CM_KEY_CHID, command.getChildID());
+        values.put(CM_KEY_NAME, command.getName());        
+     
+        // updating row
+        return db.update(CM_TABLE, values, CM_KEY_ID + " = ?",
+                new String[] { String.valueOf(command.getID()) });
+    }
+     
+     
+    // Deleting single command
+    public void deleteCommand(Command command) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(CM_TABLE, CM_KEY_ID + " = ?",
+                new String[] { String.valueOf(command.getID()) });
+        
+        List<Variable> vars = this.getAllVariables(command.getID());
+        for(Variable va : vars)
+        	this.deleteVariable(va);
+        
+        db.close();
+    }
+    
+    
+ 
+ // Adding new variable
+    public void addVariable(Variable variable) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        
+        ContentValues values = new ContentValues();
+        values.put(VA_KEY_CODE, variable.getCode());      // Variable Code
+        values.put(VA_KEY_CMID, variable.getCommandID()); // Commandid
+        values.put(VA_KEY_NAME, variable.getName());      // Variable Name        
+     
+        // Inserting Row
+        db.insert(VA_TABLE, null, values);
+        db.close(); // Closing database connection
+    }
+     
+    // Getting single variable
+    public Variable getVariable(int id) {
+    	SQLiteDatabase db = this.getReadableDatabase();
+   	 
+        Cursor cursor = db.query(VA_TABLE, new String[] { VA_KEY_ID,
+                VA_KEY_CODE, VA_KEY_CMID, VA_KEY_NAME }, VA_KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+     
+        Variable variable = new Variable(Integer.parseInt(cursor.getString(0)),
+        		Integer.parseInt(cursor.getString(1)),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
+        // return child
+        return variable;
+    }
+     
+    // Getting All variables
+    public List<Variable> getAllVariables(int commandID) {
+    	
+    	List<Variable> variableList = new ArrayList<Variable>();
+    	String getQuery = "SELECT * FROM "
+    			+ VA_TABLE
+    			+ " WHERE "+VA_KEY_CMID+" = ?";
+    	SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(getQuery, new String[] { String.valueOf(commandID)});
+        //Log.d("Variables: ", "before variable");
+     // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+            	//Log.d("Variables: ", "In variable");
+                Variable variable = new Variable();
+                variable.setID(Integer.parseInt(cursor.getString(0)));
+                variable.setCode(Integer.parseInt(cursor.getString(1)));
+                variable.setCommandID(Integer.parseInt(cursor.getString(2)));
+                variable.setName(cursor.getString(3));
+                // Adding child to list
+                variableList.add(variable);
+            } while (cursor.moveToNext());
+        }
+        
+        return variableList;
+    }
+	
+   
+   public List<Variable> getAllVariables() {
+   	
+   	List<Variable> variableList = new ArrayList<Variable>();
+
+   	
+	 String selectQuery = "SELECT  * FROM " + VA_TABLE;
+	 SQLiteDatabase db = this.getReadableDatabase();
+	 Cursor cursor = db.rawQuery(selectQuery, null);
+   	
+       if (cursor.moveToFirst()) {
+           do {
+           	//Log.d("Variables: ", "In variable");
+               Variable variable = new Variable();
+               variable.setID(Integer.parseInt(cursor.getString(0)));
+               variable.setCode(Integer.parseInt(cursor.getString(1)));
+               variable.setCommandID(Integer.parseInt(cursor.getString(2)));
+               variable.setName(cursor.getString(3));
+               // Adding child to list
+               variableList.add(variable);
+           } while (cursor.moveToNext());
+       }
+       
+       return variableList;
+   }
+     
+    // Getting variables Count
+    public int getVariablesCount() {
+    	String countQuery = "SELECT  * FROM " + VA_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+ 
+        // return count
+        return cursor.getCount();
+    }
+    
+    // Updating single variable
+    public int updateVariable(Variable variable) {
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+   	 
+        ContentValues values = new ContentValues();
+        values.put(VA_KEY_CODE, variable.getCode());
+        values.put(VA_KEY_CMID, variable.getCommandID());
+        values.put(VA_KEY_NAME, variable.getName());        
+     
+        // updating row
+        return db.update(VA_TABLE, values, VA_KEY_ID + " = ?",
+                new String[] { String.valueOf(variable.getID()) });
+    }
+     
+     
+    // Deleting single variable
+    public void deleteVariable(Variable variable) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(VA_TABLE, VA_KEY_ID + " = ?",
+                new String[] { String.valueOf(variable.getID()) });
+        db.close();
+    }
+}

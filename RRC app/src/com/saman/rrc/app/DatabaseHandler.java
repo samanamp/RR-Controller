@@ -15,7 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
  
     // Database Name = Child Command Variable Manager
     private static final String DATABASE_NAME = "ccvManager";
@@ -43,7 +43,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String VA_KEY_CMID = "commandid";
     private static final String VA_KEY_NAME = "name";
     
- 
+    //System Settings Table Name
+    private static final String SYS_TABLE = "syssettings"; 
+    // Variable Table Columns names
+    private static final String SYS_KEY_ID = "id";
+    private static final String SYS_KEY_TELNUM = "tel";
+    private static final String SYS_KEY_PASS = "pass";
+    
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -77,6 +83,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + VA_KEY_NAME + " TEXT"
                 +")";
         db.execSQL(CREATE_VARIABLES_TABLE);
+        
+        //--System Settings Table----------------------
+        String CREATE_SYS_TABLE = "CREATE TABLE " + SYS_TABLE + "("
+                + SYS_KEY_ID + " INTEGER PRIMARY KEY,"
+        		+ SYS_KEY_TELNUM + " TEXT,"
+                + SYS_KEY_PASS + " TEXT"
+                +")";
+        Log.d("databaseCommand", CREATE_SYS_TABLE);
+        db.execSQL(CREATE_SYS_TABLE);
+        
+        
     }
  
     // Upgrading database
@@ -91,13 +108,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
     
-    public void deleteAll() {
-        // Drop older table if existed
+    public int changeSysSettings(SysSetting sys){
+    	
+    	
     	SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + CH_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + CM_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + VA_TABLE);
+   	 
+        ContentValues values = new ContentValues();
+        values.put(SYS_KEY_TELNUM, sys.getTel());
+        values.put(SYS_KEY_PASS, sys.getPass());        
         
+        
+        String selectQuery = "SELECT  * FROM " + SYS_TABLE;
+        
+        
+        Cursor cursor = db.rawQuery(selectQuery, null);
+     
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+        	return db.update(SYS_TABLE, values, SYS_KEY_ID + " = ?",
+                    new String[] { cursor.getString(0) }); 
+        }
+        else
+        db.insert(SYS_TABLE, null, values);
+        db.close();
+        
+        // updating row
+        return 1;    	
+    }
+    
+    public SysSetting getSysSetting(){
+    	SQLiteDatabase db = this.getReadableDatabase();
+    	SysSetting sys;
+    	
+        Cursor cursor = db.query(SYS_TABLE, new String[] { SYS_KEY_ID,
+                SYS_KEY_TELNUM, SYS_KEY_PASS }, CH_KEY_ID + "=?",
+                new String[] { String.valueOf(1) }, null, null, null, null);
+        if (cursor != null){
+            cursor.moveToFirst();     
+            sys = new SysSetting(cursor.getString(1), cursor.getString(2));
+        }else
+        	sys = new SysSetting("09121234567890", "0000");
+        return sys;    	
     }
     
     // Adding new child

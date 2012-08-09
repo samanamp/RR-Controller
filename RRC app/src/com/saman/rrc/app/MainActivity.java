@@ -70,8 +70,9 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
     public void system_setting(){
-    	TextView txt = (TextView) findViewById(R.id.textView1);
-    	txt.setText("System Setting!");
+
+    	Intent intent = new Intent(this, SystemSettingActivity.class);
+        startActivity(intent);
     }
     public void about(){
     	TextView txt = (TextView) findViewById(R.id.textView1);

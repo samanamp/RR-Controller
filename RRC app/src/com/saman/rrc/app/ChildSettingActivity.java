@@ -28,7 +28,7 @@ public class ChildSettingActivity extends Activity {
     }
     
     public void newChild(View view){
-    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	
     	EditText nameTxt = (EditText) findViewById(R.id.editText1);
     	EditText codeTxt = (EditText) findViewById(R.id.editText2);
     	DatabaseHandler db = new DatabaseHandler(this);

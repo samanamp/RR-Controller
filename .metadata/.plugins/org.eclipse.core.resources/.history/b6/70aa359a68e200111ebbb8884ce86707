@@ -1,0 +1,30 @@
+package com.saman.rrc.app;
+
+public class SysSetting {
+	private int telnum;
+	private String pass;
+	
+	public SysSetting(){}
+	
+	public SysSetting(int telnum, String pass){
+		this.telnum = telnum;
+		this.pass = pass;
+	}
+	
+	public void setTel(int telnum){
+		this.telnum = telnum;
+	}
+	
+	public void setPass(String pass){
+		this.pass = pass;
+	}
+	
+	public int getTel(){
+		return this.telnum;
+	}
+	
+	public int getPass(){
+		return this.pass;
+	}
+
+}
