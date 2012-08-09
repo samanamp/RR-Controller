@@ -251,6 +251,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
         return commandList;
     }
+    
+    public List<Command> getAllCommands() {
+    	
+    	List<Command> commandList = new ArrayList<Command>();
+    	 String selectQuery = "SELECT  * FROM " + CM_TABLE;
+    	SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+            	//Log.d("Commands: ", "In command");
+                Command command = new Command();
+                command.setID(Integer.parseInt(cursor.getString(0)));
+                command.setCode(Integer.parseInt(cursor.getString(1)));
+                command.setChildID(Integer.parseInt(cursor.getString(2)));
+                command.setName(cursor.getString(3));
+                // Adding child to list
+                commandList.add(command);
+            } while (cursor.moveToNext());
+        }
+        
+        return commandList;
+    }
      
     // Getting commands Count
     public int getCommandsCount() {

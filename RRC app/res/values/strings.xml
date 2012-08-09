@@ -12,5 +12,6 @@
     <string name="title_activity_child_setting">ChildSettingActivity</string>
     <string name="child_add">اضافه نمودن فرزند</string>
     <string name="child_edit">تغییر مشخصات فرزندان</string>
+    <string name="title_activity_command_setting">RR Controller</string>
 
 </resources>

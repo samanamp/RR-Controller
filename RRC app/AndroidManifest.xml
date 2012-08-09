@@ -23,7 +23,15 @@
         <activity
             android:name=".ChildSettingActivity"
             android:label="@string/title_activity_child_setting" >
+        </activity>
+        <activity
+            android:name=".CommandSettingActivity"
+            android:label="@string/title_activity_command_setting" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

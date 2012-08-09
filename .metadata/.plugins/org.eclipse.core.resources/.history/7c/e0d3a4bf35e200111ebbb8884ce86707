@@ -1,0 +1,118 @@
+package com.saman.rrc.app;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+
+public class CommandSettingActivity extends Activity {
+	List<Child> children;
+    List<Command>	commands;
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_command_setting);
+        spinMake();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_command_setting, menu);
+        return true;
+    }
+    
+    public void newone(View view){
+    	//Spinner spcom = (Spinner) findViewById(R.id.spinner1);
+    	Spinner spch = (Spinner) findViewById(R.id.spinner2);
+    	EditText nameTxt = (EditText) findViewById(R.id.editText1);
+    	EditText codeTxt = (EditText) findViewById(R.id.editText2);
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	
+    	String name = nameTxt.getText().toString();
+    	String codet = codeTxt.getText().toString();
+    	int code = Integer.parseInt(codet);
+    	
+    	if(spch.getSelectedItemPosition() != -1){
+    		Command tempcm = new Command( 1, code, children.get(spch.getSelectedItemPosition()-1).getID(), name);    		
+    		db.addCommand(tempcm);
+    	}
+    	spinMake();
+    	nameTxt.setText("");
+    	codeTxt.setText("");
+    }
+    
+    public void edit(View view){
+
+    	Spinner spcom = (Spinner) findViewById(R.id.spinner1);
+    	Spinner spch = (Spinner) findViewById(R.id.spinner2);
+    	EditText nameTxt = (EditText) findViewById(R.id.editText1);
+    	EditText codeTxt = (EditText) findViewById(R.id.editText2);
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	
+    	String name = nameTxt.getText().toString();
+    	String codet = codeTxt.getText().toString();
+    	int code = Integer.parseInt(codet);
+    	
+    	if(spcom.getSelectedItemPosition() != -1)
+    	if(spch.getSelectedItemPosition() != -1 || spch.getSelectedItemPosition() != 0){
+    		Command tempcm = commands.get(spcom.getSelectedItemPosition()-1);
+    		tempcm.setCode(code);
+    		tempcm.setName(name);
+    		tempcm.setChildID(children.get(spch.getSelectedItemPosition()-1).getID());    				    		
+    		db.updateCommand(tempcm);
+    	}
+    	spinMake();
+    	nameTxt.setText("");
+    	codeTxt.setText("");
+    }
+    
+    public void del(View view){
+    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	
+    	if(sp.getSelectedItemPosition() != -1){
+    		Command tempcm = commands.get(sp.getSelectedItemPosition()-1);
+    		db.deleteCommand(tempcm);    		
+    	}
+    	spinMake();
+    }
+    
+    
+    private void spinMake(){
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	Spinner sp = (Spinner) findViewById(R.id.spinner2);
+    	Spinner spcom = (Spinner) findViewById(R.id.spinner1);
+    	
+    	children = db.getAllChilds();
+    	ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+        
+        spinnerArrayAdapter.add("--یکی فرزند را انتخاب نمایید---");
+        for (Child cn : children) {
+            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode();
+            spinnerArrayAdapter.add(txt);            
+            }
+        
+        sp.setAdapter(spinnerArrayAdapter);
+        
+        //---command spinner make---------
+        commands = db.getAllCommands();
+    	ArrayAdapter<String> spinnerArrayAdaptercom = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdaptercom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+        
+        spinnerArrayAdaptercom.add("--یک فرمان را انتخاب نمایید---");
+        for (Command cn : commands) {
+        	Child tempch = db.getChild(cn.getChildID());
+            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |Child :" + tempch.getName();
+            spinnerArrayAdaptercom.add(txt);            
+            }
+        
+        spcom.setAdapter(spinnerArrayAdaptercom);
+        
+    }
+}

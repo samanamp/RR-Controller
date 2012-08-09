@@ -1,0 +1,20 @@
+package com.saman.rrc.app;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class CommandSettingActivity extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_command_setting);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_command_setting, menu);
+        return true;
+    }
+}

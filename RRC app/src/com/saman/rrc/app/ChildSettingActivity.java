@@ -37,10 +37,10 @@ public class ChildSettingActivity extends Activity {
     	String codet = codeTxt.getText().toString();
     	int code = Integer.parseInt(codet);
     	
-    	if(sp.getSelectedItemPosition() != -1){
+    	
     		Child tempch = new Child( 1, code, name);    		
     		db.addChild(tempch);
-    	}
+    	
     	spinMake();
     	nameTxt.setText("");
     	codeTxt.setText("");

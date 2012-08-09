@@ -57,6 +57,10 @@ public class MainActivity extends Activity {
     public void command_setting(){
     	TextView txt = (TextView) findViewById(R.id.textView1);
     	txt.setText("Command Setting!");
+    	
+    	Intent intent = new Intent(this, CommandSettingActivity.class);
+        
+        startActivity(intent);
     }
     public void system_setting(){
     	TextView txt = (TextView) findViewById(R.id.textView1);
