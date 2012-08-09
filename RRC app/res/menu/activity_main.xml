@@ -3,13 +3,15 @@
     
      <item android:id="@+id/child_setting"
           android:icon="@drawable/ic_child_setting"
-          android:title="@string/child_setting"
-          />
+          android:title="@string/child_setting">
+     </item>
      
      <item android:id="@+id/command_setting"
           android:icon="@drawable/ic_command_setting"
           android:title="@string/command_setting"
-          />
+          >
+          
+     </item>
     
      <item android:id="@+id/system_setting"
           android:icon="@drawable/ic_system_setting"

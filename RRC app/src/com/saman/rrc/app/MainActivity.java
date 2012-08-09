@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -17,10 +18,13 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
+    	new MenuInflater(getApplication()).inflate(R.menu.activity_main, menu);
+        return(super.onPrepareOptionsMenu(menu));
+        //getMenuInflater().inflate(R.menu.activity_main, menu);
+        //return true;
     }
     
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -42,8 +46,8 @@ public class MainActivity extends Activity {
         }
     }
     public void child_setting(){
-    	TextView txt = (TextView) findViewById(R.id.textView1);
-    	txt.setText("Child Setting!");
+    	//TextView txt = (TextView) findViewById(R.id.textView1);
+    	//txt.setText("Child Setting!");
     	
         Intent intent = new Intent(this, ChildSettingActivity.class);
         

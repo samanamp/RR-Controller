@@ -1,0 +1,53 @@
+package com.saman.rrc.app;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+
+public class ChildSettingActivity extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_child_setting);
+        DatabaseHandler db = new DatabaseHandler(this);
+        
+        /**
+         * CRUD Operations
+         * */
+        // Inserting Contacts
+        Log.d("Insert: ", "Inserting ..");
+        db.addChild(new Child(1, 2 ,"Saman"));
+        db.addChild(new Child(1, 3 ,"سامان"));
+        db.addChild(new Child(1, 4 ,"Vahid"));
+        
+        Child updatech = db.getChild(2);
+        updatech.setCode(10);
+        db.updateChild(updatech );
+        List<Child> childs = db.getAllChilds();
+        for (Child cn : childs) {
+            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,Code: " + cn.getCode();
+                // Writing Contacts to log
+        Log.d("Name: ", log);
+        }        
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_child_setting, menu);
+        return true;
+    }
+    
+    public void newChild(View view){
+    	
+    	
+    }
+    
+    public void editChild(View view){
+    	
+    }
+}

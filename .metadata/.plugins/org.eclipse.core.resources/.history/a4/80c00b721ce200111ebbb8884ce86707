@@ -1,0 +1,91 @@
+package com.saman.rrc.app;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+
+public class ChildSettingActivity extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_child_setting);
+        DatabaseHandler db = new DatabaseHandler(this);
+        
+        /**
+         * CRUD Operations
+         * */
+        // Inserting Contacts
+        Log.d("Insert: ", "Inserting ..");
+        db.addChild(new Child(1, 2 ,"Saman"));
+        db.addChild(new Child(1, 3 ,"سامان"));
+        db.addChild(new Child(1, 4 ,"Vahid"));
+        
+        Child updatech = db.getChild(2);
+        updatech.setCode(10);
+        db.updateChild(updatech );
+        List<Child> childs = db.getAllChilds();
+        for (Child cn : childs) {
+            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,Code: " + cn.getCode();
+                // Writing Contacts to log
+        Log.d("Name: ", log);
+        }
+        
+        Log.d("Insert2: ", "Inserting...");
+        db.addCommand(new Command(1, 1, 2, "Turn On"));
+        db.addCommand(new Command(1, 3, 2, "Turn Off"));
+        db.addCommand(new Command(1, 4, 4, "Tempurature"));
+        
+        Command upcm = db.getCommand(2);
+        upcm.setName("خاموش کن");
+        db.updateCommand(upcm);
+        
+        List<Command> commands = db.getAllCommands(2);
+        
+        for (Command cm : commands) {
+            String log = "ID: "+cm.getID()+" ,Name: " + cm.getName() + " ,Code: " + cm.getCode();
+                // Writing Contacts to log
+        Log.d("Name: ", log);
+        }
+        
+        Log.d("Insert Vars:", "Inserting");
+        db.addVariable(new Variable(1, 2, 4, "new lamp"));
+        db.addVariable(new Variable(1, 3, 5, "next lamp"));
+        db.addVariable(new Variable(1, 6, 4, "لامپ قرمز"));
+        
+        Variable var = db.getVariable(1);
+        var.setName("لامپ سبز");
+        db.updateVariable(var);
+        
+        List<Variable> variables = db.getAllVariables(4);
+        
+        for(Variable va : variables){
+        	String log = "ID: "+va.getID()+" ,Name: " + va.getName() + " ,Code: " + va.getCode();
+            // Writing Contacts to log
+        	Log.d("Name: ", log);
+        }
+        
+        db.deleteChild(db.getChild(4));
+        
+        
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_child_setting, menu);
+        return true;
+    }
+    
+    public void newChild(View view){
+    	
+    	
+    }
+    
+    public void editChild(View view){
+    	
+    }
+}

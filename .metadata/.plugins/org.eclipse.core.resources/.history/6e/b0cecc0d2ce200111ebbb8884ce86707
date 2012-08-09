@@ -1,0 +1,63 @@
+package com.saman.rrc.app;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+public class ChildSettingActivity extends Activity {
+
+	private List<Child> childs;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_child_setting);
+        spinMake();
+        
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_child_setting, menu);
+        return true;
+    }
+    
+    public void newChild(View view){
+    	
+    	
+    }
+    
+    public void editChild(View view){
+    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	
+    	if(sp.getSelectedItemPosition() != -1){
+    		
+    	}
+    		
+    	
+    }
+    public void delChild(View view){
+    	
+    }
+    
+    private void spinMake(){
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	
+    	childs = db.getAllChilds();
+    	ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+        
+        spinnerArrayAdapter.add("--Select One---");
+        for (Child cn : childs) {
+            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode();
+            spinnerArrayAdapter.add(txt);            
+            }
+        
+        sp.setAdapter(spinnerArrayAdapter);
+    }
+}
