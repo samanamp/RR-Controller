@@ -34,6 +34,9 @@ public class MainActivity extends Activity {
             case R.id.command_setting:
                 command_setting();
                 return true;
+            case R.id.variable_setting:
+            	variable_setting();
+            	return true;
             case R.id.system_setting:
                 system_setting();
                 return true;
@@ -59,7 +62,11 @@ public class MainActivity extends Activity {
     	txt.setText("Command Setting!");
     	
     	Intent intent = new Intent(this, CommandSettingActivity.class);
-        
+        startActivity(intent);
+    }
+    
+    public void variable_setting(){
+    	Intent intent = new Intent(this, VariableSettingActivity.class);
         startActivity(intent);
     }
     public void system_setting(){

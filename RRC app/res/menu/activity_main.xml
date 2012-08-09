@@ -12,7 +12,9 @@
           >
           
      </item>
-    
+     <item android:id="@+id/variable_setting"          
+          android:title="@string/variable_setting"
+          />
      <item android:id="@+id/system_setting"
           android:icon="@drawable/ic_system_setting"
           android:title="@string/system_setting"

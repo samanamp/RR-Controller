@@ -373,6 +373,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
         return variableList;
     }
+	
+   
+   public List<Variable> getAllVariables() {
+   	
+   	List<Variable> variableList = new ArrayList<Variable>();
+
+   	
+	 String selectQuery = "SELECT  * FROM " + VA_TABLE;
+	 SQLiteDatabase db = this.getReadableDatabase();
+	 Cursor cursor = db.rawQuery(selectQuery, null);
+   	
+       if (cursor.moveToFirst()) {
+           do {
+           	//Log.d("Variables: ", "In variable");
+               Variable variable = new Variable();
+               variable.setID(Integer.parseInt(cursor.getString(0)));
+               variable.setCode(Integer.parseInt(cursor.getString(1)));
+               variable.setCommandID(Integer.parseInt(cursor.getString(2)));
+               variable.setName(cursor.getString(3));
+               // Adding child to list
+               variableList.add(variable);
+           } while (cursor.moveToNext());
+       }
+       
+       return variableList;
+   }
      
     // Getting variables Count
     public int getVariablesCount() {

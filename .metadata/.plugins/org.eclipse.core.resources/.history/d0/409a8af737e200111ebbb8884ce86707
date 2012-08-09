@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+     <item android:id="@+id/child_setting"
+          android:icon="@drawable/ic_child_setting"
+          android:title="@string/child_setting">
+     </item>
+     
+     <item android:id="@+id/command_setting"
+          android:icon="@drawable/ic_command_setting"
+          android:title="@string/command_setting"
+          >
+          
+     </item>
+    
+     <item android:id="@+id/system_setting"
+          android:icon="@drawable/ic_system_setting"
+          android:title="@string/system_setting"
+          />
+     
+    <item android:id="@+id/about"
+          android:icon="@drawable/ic_about"
+          android:title="@string/about" />
+</menu>
