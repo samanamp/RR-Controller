@@ -2358,3 +2358,24 @@ Java Model Exception: Java Model Status [Timed out while retrieving the attached
 
 !ENTRY com.android.ide.eclipse.adt 4 0 2012-08-10 01:06:16.758
 !MESSAGE Warning: Ignoring name conflict in resource file for name menu_settings
+
+!ENTRY org.eclipse.jdt.ui 4 10001 2012-08-10 03:34:31.833
+!MESSAGE Internal Error
+!STACK 1
+Java Model Exception: Java Model Status [Timed out while retrieving the attached javadoc for OnItemClickListener [in AdapterView$OnItemClickListener.class [in android.widget [in C:\Users\Saman\AppData\Local\Android\android-sdk\platforms\android-2.3.3_r02-linux\android.jar]]] ]
+	at org.eclipse.jdt.internal.core.JavaElement.getURLContents(JavaElement.java:808)
+	at org.eclipse.jdt.internal.core.BinaryType.getJavadocContents(BinaryType.java:1037)
+	at org.eclipse.jdt.internal.core.BinaryMethod.getAttachedJavadoc(BinaryMethod.java:643)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2$2.visit(JavadocContentAccess2.java:681)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2$InheritDocVisitor.visitInheritDocInterfaces(JavadocContentAccess2.java:202)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2$InheritDocVisitor.visitInheritDoc(JavadocContentAccess2.java:156)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2.findAttachedDocInHierarchy(JavadocContentAccess2.java:687)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2.getHTMLContent(JavadocContentAccess2.java:466)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.getHoverInfo(JavadocHover.java:621)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.internalGetHoverInfo(JavadocHover.java:567)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.getHoverInfo2(JavadocHover.java:559)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:142)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:85)
+	at org.eclipse.jface.text.TextViewerHoverManager$4.run(TextViewerHoverManager.java:166)
+!SUBENTRY 1 org.eclipse.jdt.core 4 1012 2012-08-10 03:34:31.834
+!MESSAGE Timed out while retrieving the attached javadoc for OnItemClickListener [in AdapterView$OnItemClickListener.class [in android.widget [in C:\Users\Saman\AppData\Local\Android\android-sdk\platforms\android-2.3.3_r02-linux\android.jar]]] 

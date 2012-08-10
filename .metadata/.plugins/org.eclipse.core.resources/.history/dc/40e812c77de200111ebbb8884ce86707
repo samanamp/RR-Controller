@@ -9,8 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -56,38 +54,37 @@ public class MainActivity extends Activity {
             spinnerArrayAdapter.add(txt);            
             }
         
-
         sp.setAdapter(spinnerArrayAdapter);
     	
-    	variables = db.getAllVariables();
-    	ArrayAdapter<String> spinnerArrayAdaptervar = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
-        spinnerArrayAdaptervar.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+//    	List<Variable> variables = db.getAllVariables();
+    	ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
         
-        spinnerArrayAdaptervar.add("--یک متقیر را انتخاب نمایید---");
-        for (Variable cn : variables) {
+        spinnerArrayAdapter.add("--یک متقیر را انتخاب نمایید---");
+/*        for (Variable cn : variables) {
         	Command tempcom = db.getCommand(cn.getCommandID());
         	String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |COM.:" + tempcom.getName();
-            spinnerArrayAdaptervar.add(txt);            
+            spinnerArrayAdapter.add(txt);            
             }
-        
-        spvar.setAdapter(spinnerArrayAdaptervar);
+*/        
+        spvar.setAdapter(spinnerArrayAdapter);
         
         //---command spinner make---------
-        commands = db.getAllCommands();
+//        List<Command> commands = db.getAllCommands();
     	ArrayAdapter<String> spinnerArrayAdaptercom = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
         spinnerArrayAdaptercom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
         
         spinnerArrayAdaptercom.add("--یک فرمان را انتخاب نمایید---");
-        for (Command cn : commands) {
+/*        for (Command cn : commands) {
         	Child tempch = db.getChild(cn.getChildID());
             String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |Child :" + tempch.getName();
             spinnerArrayAdaptercom.add(txt);            
             }
-        
+*/        
         spcom.setAdapter(spinnerArrayAdaptercom);
     }
     
-/*    public void updateCommand(){
+    public void updateCommand(View view){
     	DatabaseHandler db = new DatabaseHandler(this);
     	Spinner spcom = (Spinner) findViewById(R.id.spinner2);
     	Spinner spch = (Spinner) findViewById(R.id.spinner1);
@@ -111,7 +108,7 @@ public class MainActivity extends Activity {
     	DatabaseHandler db = new DatabaseHandler(this);
     	Spinner spvar = (Spinner) findViewById(R.id.spinner3);
     }
-*/
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {

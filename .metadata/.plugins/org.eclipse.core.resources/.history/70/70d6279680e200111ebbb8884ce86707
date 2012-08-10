@@ -106,12 +106,12 @@ public class MainActivity extends Activity {
         
       spcom.setAdapter(spinnerArrayAdaptercom);
     }
-    
+*/    
     public void updateVariable(View view){
     	DatabaseHandler db = new DatabaseHandler(this);
     	Spinner spvar = (Spinner) findViewById(R.id.spinner3);
     }
-*/
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
