@@ -149,7 +149,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         	sys = new SysSetting(cursor.getString(1), cursor.getString(2));        	
         }
           
-        	
+        	db.close();
         	return sys;    	
     }
     
@@ -179,6 +179,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Child child = new Child(Integer.parseInt(cursor.getString(0)),
         		Integer.parseInt(cursor.getString(1)), cursor.getString(2));
         // return child
+        db.close();
         return child;
     }
      
@@ -205,6 +206,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
      
         // return child list
+        db.close();
         return childList;
     	
     }
@@ -217,6 +219,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
  
         // return count
+        db.close();
         return cursor.getCount();
     }
     
@@ -228,7 +231,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(CH_KEY_CODE, child.getCode());
         values.put(CH_KEY_NAME, child.getName());        
-     
+  
         // updating row
         return db.update(CH_TABLE, values, CH_KEY_ID + " = ?",
                 new String[] { String.valueOf(child.getID()) });
@@ -275,6 +278,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Command command = new Command(Integer.parseInt(cursor.getString(0)),
         		Integer.parseInt(cursor.getString(1)),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
         // return child
+        db.close();
         return command;
     }
      
@@ -301,7 +305,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 commandList.add(command);
             } while (cursor.moveToNext());
         }
-        
+        db.close();
         return commandList;
     }
     
@@ -324,7 +328,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 commandList.add(command);
             } while (cursor.moveToNext());
         }
-        
+        db.close();
         return commandList;
     }
      
@@ -336,6 +340,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
  
         // return count
+        db.close();
         return cursor.getCount();
     }
     
@@ -348,7 +353,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(CM_KEY_CODE, command.getCode());
         values.put(CM_KEY_CHID, command.getChildID());
         values.put(CM_KEY_NAME, command.getName());        
-     
+      
         // updating row
         return db.update(CM_TABLE, values, CM_KEY_ID + " = ?",
                 new String[] { String.valueOf(command.getID()) });
@@ -397,6 +402,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Variable variable = new Variable(Integer.parseInt(cursor.getString(0)),
         		Integer.parseInt(cursor.getString(1)),Integer.parseInt(cursor.getString(2)), cursor.getString(3));
         // return child
+        db.close();
         return variable;
     }
      
@@ -423,7 +429,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 variableList.add(variable);
             } while (cursor.moveToNext());
         }
-        
+        db.close();
         return variableList;
     }
 	
@@ -449,7 +455,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                variableList.add(variable);
            } while (cursor.moveToNext());
        }
-       
+       db.close();
        return variableList;
    }
      
@@ -461,6 +467,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
  
         // return count
+        db.close();
         return cursor.getCount();
     }
     
@@ -475,6 +482,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(VA_KEY_NAME, variable.getName());        
      
         // updating row
+        
         return db.update(VA_TABLE, values, VA_KEY_ID + " = ?",
                 new String[] { String.valueOf(variable.getID()) });
     }

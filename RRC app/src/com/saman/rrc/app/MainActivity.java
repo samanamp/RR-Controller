@@ -3,6 +3,9 @@ package com.saman.rrc.app;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +26,14 @@ public class MainActivity extends Activity {
 	SmsManager sms;
 	
 	String lastCommand;
+	
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sms = SmsManager.getDefault();
+        sms = SmsManager.getDefault();       
+      
     }
 
     @Override
@@ -90,6 +96,29 @@ public class MainActivity extends Activity {
     	}
     }
 
+	public void smsRec(String st){
+		String ns = Context.NOTIFICATION_SERVICE;
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+		
+		int icon = R.drawable.notification_icon;
+		CharSequence tickerText = st;
+		long when = System.currentTimeMillis();
+
+		Notification notification = new Notification(icon, tickerText, when);
+		
+		Context context = getApplicationContext();
+		CharSequence contentTitle = "RR Controller";
+		CharSequence contentText = st;
+		Intent notificationIntent = new Intent(this, MainActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		
+		final int HELLO_ID = 1;
+
+		mNotificationManager.notify(HELLO_ID, notification);
+	}
+	
     private void updatePage(){
     	DatabaseHandler db = new DatabaseHandler(this);
     	Spinner sp = (Spinner) findViewById(R.id.spinner1);
@@ -102,9 +131,9 @@ public class MainActivity extends Activity {
     	ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
         
-        spinnerArrayAdapter.add("--یکی فرزند را انتخاب نمایید---");
+        spinnerArrayAdapter.add("--یک فرزند را انتخاب نمایید---");
         for (Child cn : children) {
-            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode();
+            String txt = "Name :" + cn.getName();
             spinnerArrayAdapter.add(txt);            
             }
         
@@ -115,10 +144,11 @@ public class MainActivity extends Activity {
     	ArrayAdapter<String> spinnerArrayAdaptervar = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
         spinnerArrayAdaptervar.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
         
+        
         spinnerArrayAdaptervar.add("--یک متقیر را انتخاب نمایید---");
         for (Variable cn : variables) {
         	Command tempcom = db.getCommand(cn.getCommandID());
-        	String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |COM.:" + tempcom.getName();
+        	String txt = "Name :" + cn.getName() + " |COM.:" + tempcom.getName();
             spinnerArrayAdaptervar.add(txt);            
             }
         
@@ -132,7 +162,7 @@ public class MainActivity extends Activity {
         spinnerArrayAdaptercom.add("--یک فرمان را انتخاب نمایید---");
         for (Command cn : commands) {
         	Child tempch = db.getChild(cn.getChildID());
-            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |Child :" + tempch.getName();
+            String txt = "Name :" + cn.getName() + " |Child :" + tempch.getName();
             spinnerArrayAdaptercom.add(txt);            
             }
         

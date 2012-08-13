@@ -16,5 +16,6 @@
     <string name="variable_setting">متغیرهای دستورات</string>
     <string name="title_activity_variable_setting">RR Controller</string>
     <string name="title_activity_system_setting">RR Controller</string>
+    <string name="title_activity_smsreceiver">RR Controller</string>
 
 </resources>

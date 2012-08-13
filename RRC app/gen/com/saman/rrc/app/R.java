@@ -18,6 +18,7 @@ public final class R {
         public static final int ic_command_setting=0x7f020004;
         public static final int ic_launcher=0x7f020005;
         public static final int ic_system_setting=0x7f020006;
+        public static final int notification_icon=0x7f020007;
     }
     public static final class id {
         public static final int about=0x7f07000f;
@@ -49,8 +50,9 @@ public final class R {
         public static final int activity_child_setting=0x7f060000;
         public static final int activity_command_setting=0x7f060001;
         public static final int activity_main=0x7f060002;
-        public static final int activity_system_setting=0x7f060003;
-        public static final int activity_variable_setting=0x7f060004;
+        public static final int activity_smsreceiver=0x7f060003;
+        public static final int activity_system_setting=0x7f060004;
+        public static final int activity_variable_setting=0x7f060005;
     }
     public static final class string {
         public static final int about=0x7f040007;
@@ -65,6 +67,7 @@ public final class R {
         public static final int title_activity_child_setting=0x7f040008;
         public static final int title_activity_command_setting=0x7f04000b;
         public static final int title_activity_main=0x7f040003;
+        public static final int title_activity_smsreceiver=0x7f04000f;
         public static final int title_activity_system_setting=0x7f04000e;
         public static final int title_activity_variable_setting=0x7f04000d;
         public static final int variable_setting=0x7f04000c;

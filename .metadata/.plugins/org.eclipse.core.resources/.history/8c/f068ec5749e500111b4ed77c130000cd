@@ -1,0 +1,5 @@
+package com.saman.rrc.app;
+
+public class SmsReceiver {
+
+}

@@ -1,0 +1,20 @@
+package com.saman.rrc.app;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class SMSReceiver extends Activity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_smsreceiver);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_smsreceiver, menu);
+        return true;
+    }
+}

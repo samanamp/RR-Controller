@@ -27,21 +27,26 @@
         <activity
             android:name=".CommandSettingActivity"
             android:label="@string/title_activity_command_setting" >
-            
         </activity>
         <activity
             android:name=".VariableSettingActivity"
             android:label="@string/title_activity_variable_setting" >
-            
         </activity>
         <activity
             android:name=".SystemSettingActivity"
             android:label="@string/title_activity_system_setting" >
-            
         </activity>
+         <receiver android:name=".SmsReceiver"> 
+            <intent-filter> 
+                <action android:name=
+                    "android.provider.Telephony.SMS_RECEIVED" /> 
+            </intent-filter> 
+        </receiver>
     </application>
-	<uses-permission android:name="android.permission.SEND_SMS">
+
+    <uses-permission android:name="android.permission.SEND_SMS" >
     </uses-permission>
-    <uses-permission android:name="android.permission.RECEIVE_SMS">
+    <uses-permission android:name="android.permission.RECEIVE_SMS" >
     </uses-permission>
+
 </manifest>
