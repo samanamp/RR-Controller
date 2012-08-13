@@ -14,7 +14,7 @@
 
     <Spinner
         android:id="@+id/spinner1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
@@ -23,7 +23,7 @@
 
     <Spinner
         android:id="@+id/spinner2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/spinner1" 
@@ -31,7 +31,7 @@
 
     <Spinner
         android:id="@+id/spinner3"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/spinner2" />
@@ -52,6 +52,7 @@
         android:layout_alignBaseline="@+id/textView2"
         android:layout_alignBottom="@+id/textView2"
         android:layout_alignParentRight="true"
-        android:text="ارسال دستور" />
+        android:text="ارسال دستور"
+        android:onClick="send" />
 
 </RelativeLayout>

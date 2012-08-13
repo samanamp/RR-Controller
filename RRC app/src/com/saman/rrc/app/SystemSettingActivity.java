@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SystemSettingActivity extends Activity {
 
@@ -27,6 +28,7 @@ public class SystemSettingActivity extends Activity {
     	db.changeSysSettings(new SysSetting(tel, pass));
     	passTxt.setText("");
     	codeTxt.setText("");
+    	Toast.makeText(getApplicationContext(), "تنظیمات جدید ذخیره شد", 10).show();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

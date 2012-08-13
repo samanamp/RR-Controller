@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class CommandSettingActivity extends Activity {
 	List<Child> children;
@@ -44,6 +45,7 @@ public class CommandSettingActivity extends Activity {
     	spinMake();
     	nameTxt.setText("");
     	codeTxt.setText("");
+    	Toast.makeText(getApplicationContext(), "دستور جدید ذخیره شد", 10).show();
     }
     
     public void edit(View view){
@@ -69,6 +71,7 @@ public class CommandSettingActivity extends Activity {
     	spinMake();
     	nameTxt.setText("");
     	codeTxt.setText("");
+    	Toast.makeText(getApplicationContext(), "تغییرات جدید ذخیره شد", 10).show();
     }
     
     public void del(View view){
@@ -80,6 +83,7 @@ public class CommandSettingActivity extends Activity {
     		db.deleteCommand(tempcm);    		
     	}
     	spinMake();
+    	Toast.makeText(getApplicationContext(), "دستور انتخاب شده پاک شد", 10).show();
     }
     
     

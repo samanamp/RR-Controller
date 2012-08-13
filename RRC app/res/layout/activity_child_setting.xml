@@ -23,12 +23,21 @@
         android:onClick="editChild"
         android:text="تغییر بده" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="حذف کن" 
+        android:onClick="delChild"/>
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:text="پیکربندی فرزندان"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#ffffff" />
@@ -37,17 +46,17 @@
         android:id="@+id/spinner1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/spinner1"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="20dp"
         android:text="نام : "
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff" />
@@ -58,8 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView2"
         android:layout_alignBottom="@+id/textView2"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/textView2"
+        android:layout_alignParentLeft="true"
         android:ems="10" >
 
         <requestFocus />
@@ -69,9 +77,9 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/editText1"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="27dp"
         android:text="کد :"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff" />
@@ -82,17 +90,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView3"
         android:layout_alignBottom="@+id/textView3"
-        android:layout_alignLeft="@+id/editText1"
+        android:layout_alignParentLeft="true"
         android:ems="10"
         android:inputType="number" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="حذف کن" 
-        android:onClick="delChild"/>
 
 </RelativeLayout>

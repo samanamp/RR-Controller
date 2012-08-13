@@ -1,0 +1,222 @@
+package com.saman.rrc.app;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+	List<Child> children;
+	List<Command> commands;
+	List<Variable> variables;
+	SmsManager sms;
+	
+	String lastCommand;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        sms = SmsManager.getDefault();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	new MenuInflater(getApplication()).inflate(R.menu.activity_main, menu);
+        return(super.onPrepareOptionsMenu(menu));
+        //getMenuInflater().inflate(R.menu.activity_main, menu);
+        //return true;
+    }
+    
+    protected void onResume() {
+        super.onResume();
+        updatePage();
+    }
+    
+    //@SuppressLint("ShowToast")
+	public void send(View view){
+    	Context context = getApplicationContext();
+    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	Spinner spcom = (Spinner) findViewById(R.id.spinner2);
+    	Spinner spvar = (Spinner) findViewById(R.id.spinner3);    	
+    	
+    	int spsel = sp.getSelectedItemPosition();
+    	int spcomsel = spcom.getSelectedItemPosition();
+    	int spvarsel = spvar.getSelectedItemPosition();
+    	
+    	//---Check if there is some option not selected----
+    	if( spsel <= 0 || spcomsel <= 0 || spvarsel <= 0){
+    		
+    		CharSequence msg = "Please Select Completely!";
+    		Toast.makeText(context, msg, 10).show();
+    	}else{
+    		DatabaseHandler db = new DatabaseHandler(this);
+    		SysSetting ss = db.getSysSetting();
+    		Child chsel = children.get(spsel-1);
+    		Command comsel = commands.get(spcomsel-1);
+    		Variable varsel = variables.get(spvarsel-1);
+    		String phoneNo = ss.getTel();
+    		String pass = ss.getPass();
+    	lastCommand = "*";
+    	if(chsel.code < 10)
+    		lastCommand += "0"+chsel.code;
+    	else
+    		lastCommand += chsel.code;
+    	lastCommand += comsel.code;
+    	lastCommand += varsel.code;
+    	
+    	int chksum = chsel.code/10 + chsel.code%10 + comsel.code + varsel.code;
+    	
+    	if(chksum < 10)
+    		lastCommand += "0"+chksum;
+    	else
+    		lastCommand += chksum;
+    	
+    	String message = pass + lastCommand;
+    	sms.sendTextMessage(phoneNo, "MySelf", message, null, null);
+    	
+    	Toast.makeText(context, lastCommand, 10).show();
+    		
+    	}
+    }
+
+    private void updatePage(){
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	Spinner spcom = (Spinner) findViewById(R.id.spinner2);
+    	Spinner spvar = (Spinner) findViewById(R.id.spinner3);    	
+    	TextView tel = (TextView) findViewById(R.id.textView2);
+    	tel.setText(db.getSysSetting().getTel());
+    	
+    	children = db.getAllChilds();
+    	ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+        
+        spinnerArrayAdapter.add("--یکی فرزند را انتخاب نمایید---");
+        for (Child cn : children) {
+            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode();
+            spinnerArrayAdapter.add(txt);            
+            }
+        
+
+        sp.setAdapter(spinnerArrayAdapter);
+    	
+    	variables = db.getAllVariables();
+    	ArrayAdapter<String> spinnerArrayAdaptervar = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdaptervar.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+        
+        spinnerArrayAdaptervar.add("--یک متقیر را انتخاب نمایید---");
+        for (Variable cn : variables) {
+        	Command tempcom = db.getCommand(cn.getCommandID());
+        	String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |COM.:" + tempcom.getName();
+            spinnerArrayAdaptervar.add(txt);            
+            }
+        
+        spvar.setAdapter(spinnerArrayAdaptervar);
+        
+        //---command spinner make---------
+        commands = db.getAllCommands();
+    	ArrayAdapter<String> spinnerArrayAdaptercom = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+        spinnerArrayAdaptercom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+        
+        spinnerArrayAdaptercom.add("--یک فرمان را انتخاب نمایید---");
+        for (Command cn : commands) {
+        	Child tempch = db.getChild(cn.getChildID());
+            String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |Child :" + tempch.getName();
+            spinnerArrayAdaptercom.add(txt);            
+            }
+        
+        spcom.setAdapter(spinnerArrayAdaptercom);
+    }
+    
+/*    public void updateCommand(){
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	Spinner spcom = (Spinner) findViewById(R.id.spinner2);
+    	Spinner spch = (Spinner) findViewById(R.id.spinner1);
+    	
+    	//---command spinner make---------
+      commands = db.getAllCommands(children.get(spch.getSelectedItemPosition()-1).getID());
+    	ArrayAdapter<String> spinnerArrayAdaptercom = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item);
+      spinnerArrayAdaptercom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down vieww
+      
+      spinnerArrayAdaptercom.add("--یک فرمان را انتخاب نمایید---");
+        for (Command cn : commands) {
+      	Child tempch = db.getChild(cn.getChildID());
+          String txt = "Name :" + cn.getName() + " |Code :" + cn.getCode()+ " |Child :" + tempch.getName();
+          spinnerArrayAdaptercom.add(txt);            
+          }
+        
+      spcom.setAdapter(spinnerArrayAdaptercom);
+    }
+    
+    public void updateVariable(View view){
+    	DatabaseHandler db = new DatabaseHandler(this);
+    	Spinner spvar = (Spinner) findViewById(R.id.spinner3);
+    }
+*/
+    
+    
+    //----Options Menu----------------------------------------------------------
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.child_setting:
+                child_setting();
+                return true;
+            case R.id.command_setting:
+                command_setting();
+                return true;
+            case R.id.variable_setting:
+            	variable_setting();
+            	return true;
+            case R.id.system_setting:
+                system_setting();
+                return true;
+            case R.id.about:
+                about();
+                return true;
+            
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    public void child_setting(){
+    	//TextView txt = (TextView) findViewById(R.id.textView1);
+    	//txt.setText("Child Setting!");
+    	
+        Intent intent = new Intent(this, ChildSettingActivity.class);        
+        startActivity(intent);
+        
+    }
+    public void command_setting(){
+    	TextView txt = (TextView) findViewById(R.id.textView1);
+    	txt.setText("Command Setting!");
+    	
+    	Intent intent = new Intent(this, CommandSettingActivity.class);
+        startActivity(intent);
+    }
+    
+    public void variable_setting(){
+    	Intent intent = new Intent(this, VariableSettingActivity.class);
+        startActivity(intent);
+    }
+    public void system_setting(){
+
+    	Intent intent = new Intent(this, SystemSettingActivity.class);
+        startActivity(intent);
+    }
+    public void about(){
+    	TextView txt = (TextView) findViewById(R.id.textView1);
+    	txt.setText("About");
+    }
+}

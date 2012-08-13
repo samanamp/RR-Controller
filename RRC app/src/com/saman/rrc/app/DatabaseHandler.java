@@ -15,7 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
  
     // Database Name = Child Command Variable Manager
     private static final String DATABASE_NAME = "ccvManager";
@@ -103,6 +103,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CH_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + CM_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + VA_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + SYS_TABLE);
         
         // Create tables again
         onCreate(db);
@@ -138,17 +139,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     
     public SysSetting getSysSetting(){
     	SQLiteDatabase db = this.getReadableDatabase();
-    	SysSetting sys;
+    	SysSetting sys = new SysSetting("09121234567", "Password");
     	
         Cursor cursor = db.query(SYS_TABLE, new String[] { SYS_KEY_ID,
                 SYS_KEY_TELNUM, SYS_KEY_PASS }, CH_KEY_ID + "=?",
                 new String[] { String.valueOf(1) }, null, null, null, null);
-        if (cursor != null){
-            cursor.moveToFirst();     
-            sys = new SysSetting(cursor.getString(1), cursor.getString(2));
-        }else
-        	sys = new SysSetting("09121234567890", "0000");
-        return sys;    	
+        
+        if (cursor.moveToFirst()){
+        	sys = new SysSetting(cursor.getString(1), cursor.getString(2));        	
+        }
+          
+        	
+        	return sys;    	
     }
     
     // Adding new child

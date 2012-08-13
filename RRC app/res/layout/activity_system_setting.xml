@@ -4,26 +4,35 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_menu" >
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="changeSettings"
+        android:text="Ok !" />
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:textColor="#ffffff"
+        android:layout_centerHorizontal="true"
         android:text="تنظیمات سیستم"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="20dp"
-        android:textColor="#ffffff"
+        android:layout_marginTop="27dp"
         android:text="شماره مقصد:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ffffff" />
 
     <EditText
         android:id="@+id/editText1"
@@ -31,17 +40,17 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView2"
         android:layout_alignBottom="@+id/textView2"
-        android:inputType="number"
-        android:layout_alignParentRight="true"
-        android:ems="10" />
+        android:layout_alignParentLeft="true"
+        android:ems="10"
+        android:inputType="number" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/editText1"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="41dp"
         android:text="رمز :"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff" />
@@ -52,16 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView3"
         android:layout_alignBottom="@+id/textView3"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
         android:ems="10" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" 
-        android:text="Ok !"
-        android:onClick="changeSettings"/>
 
 </RelativeLayout>

@@ -3,26 +3,31 @@ package com.saman.rrc.app;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	List<Child> children;
 	List<Command> commands;
 	List<Variable> variables;
+	SmsManager sms;
+	
+	String lastCommand;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sms = SmsManager.getDefault();
     }
 
     @Override
@@ -36,6 +41,53 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         updatePage();
+    }
+    
+    //@SuppressLint("ShowToast")
+	public void send(View view){
+    	Context context = getApplicationContext();
+    	Spinner sp = (Spinner) findViewById(R.id.spinner1);
+    	Spinner spcom = (Spinner) findViewById(R.id.spinner2);
+    	Spinner spvar = (Spinner) findViewById(R.id.spinner3);    	
+    	
+    	int spsel = sp.getSelectedItemPosition();
+    	int spcomsel = spcom.getSelectedItemPosition();
+    	int spvarsel = spvar.getSelectedItemPosition();
+    	
+    	//---Check if there is some option not selected----
+    	if( spsel <= 0 || spcomsel <= 0 || spvarsel <= 0){
+    		
+    		CharSequence msg = "لطفاً تمام فیلدها را انتخاب نمایید!";
+    		Toast.makeText(context, msg, 10).show();
+    	}else{
+    		DatabaseHandler db = new DatabaseHandler(this);
+    		SysSetting ss = db.getSysSetting();
+    		Child chsel = children.get(spsel-1);
+    		Command comsel = commands.get(spcomsel-1);
+    		Variable varsel = variables.get(spvarsel-1);
+    		String phoneNo = ss.getTel();
+    		String pass = ss.getPass();
+    	lastCommand = "*";
+    	if(chsel.code < 10)
+    		lastCommand += "0"+chsel.code;
+    	else
+    		lastCommand += chsel.code;
+    	lastCommand += comsel.code;
+    	lastCommand += varsel.code;
+    	
+    	int chksum = chsel.code/10 + chsel.code%10 + comsel.code + varsel.code;
+    	
+    	if(chksum < 10)
+    		lastCommand += "0"+chksum;
+    	else
+    		lastCommand += chksum;
+    	
+    	String message = pass + lastCommand;
+    	sms.sendTextMessage(phoneNo, null, message, null, null);
+    	
+    	Toast.makeText(context, lastCommand, 10).show();
+    		
+    	}
     }
 
     private void updatePage(){
@@ -112,6 +164,9 @@ public class MainActivity extends Activity {
     	Spinner spvar = (Spinner) findViewById(R.id.spinner3);
     }
 */
+    
+    
+    //----Options Menu----------------------------------------------------------
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -139,14 +194,11 @@ public class MainActivity extends Activity {
     	//TextView txt = (TextView) findViewById(R.id.textView1);
     	//txt.setText("Child Setting!");
     	
-        Intent intent = new Intent(this, ChildSettingActivity.class);
-        
+        Intent intent = new Intent(this, ChildSettingActivity.class);        
         startActivity(intent);
         
     }
     public void command_setting(){
-    	TextView txt = (TextView) findViewById(R.id.textView1);
-    	txt.setText("Command Setting!");
     	
     	Intent intent = new Intent(this, CommandSettingActivity.class);
         startActivity(intent);
@@ -162,7 +214,6 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
     public void about(){
-    	TextView txt = (TextView) findViewById(R.id.textView1);
-    	txt.setText("About");
+    	
     }
 }

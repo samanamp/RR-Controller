@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class ChildSettingActivity extends Activity {
 
@@ -44,6 +45,7 @@ public class ChildSettingActivity extends Activity {
     	spinMake();
     	nameTxt.setText("");
     	codeTxt.setText("");
+    	Toast.makeText(getApplicationContext(), "فرزند جدید ذخیره شد", 10).show();
     }
     
     public void editChild(View view){
@@ -65,6 +67,7 @@ public class ChildSettingActivity extends Activity {
     	spinMake();
     	nameTxt.setText("");
     	codeTxt.setText("");
+    	Toast.makeText(getApplicationContext(), "تغییرات جدید ذخیره شد", 10).show();
     }
     
     public void delChild(View view){
@@ -76,6 +79,7 @@ public class ChildSettingActivity extends Activity {
     		db.deleteChild(tempch);    		
     	}
     	spinMake();
+    	Toast.makeText(getApplicationContext(), "فرزند انتخاب شده حذف شد", 10).show();
 
     }
     

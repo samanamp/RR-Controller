@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class VariableSettingActivity extends Activity {
 	List<Command> commands;
@@ -36,15 +37,22 @@ public class VariableSettingActivity extends Activity {
     	
     	String name = nameTxt.getText().toString();
     	String codet = codeTxt.getText().toString();
-    	int code = Integer.parseInt(codet);
     	
-    	if(spcm.getSelectedItemPosition() != -1){
+    	if( name.length()>1 && codet.length()==1 && spcm.getSelectedItemPosition()>0){
+    		int code = Integer.parseInt(codet);
+    	
+    	
     		Variable tempcm = new Variable( 1, code, commands.get(spcm.getSelectedItemPosition()-1).getID(), name);    		
     		db.addVariable(tempcm);
+    	
+    		spinMake();
+    		nameTxt.setText("");
+    		codeTxt.setText("");
+    	
+    		Toast.makeText(getApplicationContext(), "متغیر جدید ذخیره شد", 10).show();
+    	}else{
+    		Toast.makeText(getApplicationContext(), "فیلدها را کامل انتخاب نمایید. کد می تواند یک رقمی باشد!", 10).show();
     	}
-    	spinMake();
-    	nameTxt.setText("");
-    	codeTxt.setText("");
     }
     
     public void edit(View view){
